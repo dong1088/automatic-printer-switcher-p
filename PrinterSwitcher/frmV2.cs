@@ -64,17 +64,11 @@ namespace PrinterSwitcher
 
             //assign sort to list views
             lvProcesses.ListViewItemSorter = new ListViewColumnSorter();
-            
 
-            try
-            {
-                Thread updateCheck = new Thread(new ThreadStart(checkForUpdates));
-                updateCheck.Start();
-            }
-            catch (Exception ex)
-            {
-            }
-            
+            // alternate row colors for better readability
+            lvProcesses.OwnerDraw = false;
+            SetListViewStyle();
+
             //check to see if /tray was passed
             if (Environment.CommandLine.Contains("/tray"))
             {
@@ -92,6 +86,16 @@ namespace PrinterSwitcher
             this.Text += " v" + selfi.AssemblyVersion;
 
 
+        }
+
+        private void SetListViewStyle()
+        {
+            lvProcesses.BackColor = Color.White;
+            lvProcesses.ForeColor = Color.FromArgb(50, 50, 50);
+
+            // Apply alternating row colors via a simple approach:
+            // WinForms ListView doesn't natively support alternating rows,
+            // so we just keep it clean with white background.
         }
 
         public void oneShot(object o)
@@ -150,50 +154,6 @@ namespace PrinterSwitcher
 
         }
 
-        public void checkForUpdates()
-        {
-            try
-            {
-                selfinfo asm = new selfinfo();
-
-                System.Net.WebClient verFile = new System.Net.WebClient();
-                string sAvailableVer = verFile.DownloadString("http://www.computedsynergy.com/aps/meta/version.txt");
-
-                int availableVersion = Convert.ToInt32(sAvailableVer.Replace(".", ""));
-                int currentVersion = Convert.ToInt32(asm.AssemblyVersion.Replace(".", ""));
-
-                if (availableVersion > currentVersion)
-                {
-                    setUpdatesAvailable(sAvailableVer);
-                }
-                else
-                {
-                    checkingForUpdatesToolStripMenuItem.Text = "No updates available.";
-                }
-            }
-            catch (Exception ex)
-            {
-                checkingForUpdatesToolStripMenuItem.Text = "No updates available.";
-            }
-        }
-
-        delegate void SetUpdatesAavailable(string version);
-
-        private void setUpdatesAvailable(string version)
-        {
-            if (this.InvokeRequired)
-            {
-                SetUpdatesAavailable upa = new SetUpdatesAavailable(setUpdatesAvailable);
-                this.Invoke(upa, new object[] { version });
-            }
-            else
-            {
-                checkingForUpdatesToolStripMenuItem.Text = "Download new version " + version;
-                checkingForUpdatesToolStripMenuItem.ForeColor = Color.Green;
-                checkingForUpdatesToolStripMenuItem.Enabled = true;
-            }
-        }
-
         private void frmV2_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!mShutdown)
@@ -233,77 +193,20 @@ namespace PrinterSwitcher
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message, "Automatic start configuration",
+                MessageBox.Show("Automatic start configuration error",
+                    "Automatic start configuration",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (ShouldMinimizeOnStartup())
-            {
-                alwaysMinimizeToTrayOnStartupToolStripMenuItem.Checked = true;
-            }
-            else
-            {
-                alwaysMinimizeToTrayOnStartupToolStripMenuItem.Checked = false;
-            }
-
-        }
-
-        private bool ShouldMinimizeOnStartup()
-        {
-            bool bRet = false;
-            try
-            {
-                RegistryKey aps = Registry.CurrentUser.OpenSubKey(
-                    "Software\\Computed Synergy\\APS", true);
-                if (null != aps)
-                {
-                    string val = (string)aps.GetValue("MinimizeOnStartup");
-                    if (null != val)
-                    {
-                        bRet = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Automatic start configuration",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            return bRet;
-
-        }
-
-        private void SetMinimizeOnStartup(bool delete)
-        {
-            try
-            {
-                RegistryKey aps = Registry.CurrentUser.OpenSubKey(
-                    "Software\\Computed Synergy\\APS", true);
-                if (null != aps)
-                {
-                    if (delete)
-                    {
-                        aps.DeleteValue("MinimizeOnStartup");
-                    }
-                    else
-                    {
-                        aps.SetValue("MinimizeOnStartup", "true");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Automatic start configuration",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.Focus();
         }
 
         private void automaticallyStartWhenILogOnToolStripMenuItem_Click(object sender, EventArgs e)
@@ -326,35 +229,42 @@ namespace PrinterSwitcher
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message, "Automatic start configuration",
+                MessageBox.Show("Automatic start configuration error",
+                    "Automatic start configuration",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void alwaysMinimizeToTrayOnStartupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (alwaysMinimizeToTrayOnStartupToolStripMenuItem.Checked)
-            {
-                SetMinimizeOnStartup(true);
-                alwaysMinimizeToTrayOnStartupToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                SetMinimizeOnStartup(false);
-                alwaysMinimizeToTrayOnStartupToolStripMenuItem.Checked = true;
             }
         }
 
         private void contactComputedSynergyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("mailto:info@computedsynergy.com");
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/dong1088/automatic-printer-switcher-p",
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+            }
         }
 
         private void reportBugToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("mailto:support@computedsynergy.com");
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/dong1088/automatic-printer-switcher-p/issues",
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -374,34 +284,22 @@ namespace PrinterSwitcher
         {
             try
             {
-                System.Diagnostics.Process.Start("http://www.computedsynergy.com/aps/");
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/dong1088/automatic-printer-switcher-p/releases",
+                    UseShellExecute = true
+                });
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("We could not start automatic download of new version.\nPlease visit http://www.computedsynergy.com/aps to download it manually");
+                MessageBox.Show("无法打开浏览器。请手动访问: https://github.com/dong1088/automatic-printer-switcher-p/releases");
             }
         }
 
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            shutdownAPS();
-        }
-
-        private void specialOfferContextMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Process.Start((string)specialOfferContextMenuItem.Tag);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Something went wrong.. please use the contact us option to notify us of this problem.",
-                    "Ooops",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-        
-        }
+private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+	        {
+	            shutdownAPS();
+	        }
 
 
         private void refreshMapping()
@@ -686,6 +584,7 @@ namespace PrinterSwitcher
                     {
                         //Do we have a general printer mapped for this process?
                         SetDefaultPrinter(mProcesses[process.ProcessName].MappedPrinter);
+                        ShowStatusFeedback("→ " + process.ProcessName + " : " + mProcesses[process.ProcessName].MappedPrinter);
                     }
                     else
                     {
@@ -694,7 +593,7 @@ namespace PrinterSwitcher
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //exceptions can occur
             }
@@ -714,18 +613,38 @@ namespace PrinterSwitcher
 
             mProcesses.mSysDefPrinter = printers.SelectedPrinter;
 
-            lblStatus.Text = "Changed default printer to " + printers.SelectedPrinter;
+            ShowStatusFeedback("默认打印机已更改为 " + printers.SelectedPrinter);
 
             saveMappings();
+        }
+
+        /// <summary>
+        /// Show a status message that auto-clears after 3 seconds.
+        /// </summary>
+        private void ShowStatusFeedback(string message)
+        {
+            lblStatus.Text = message;
+            var timer = new System.Windows.Forms.Timer { Interval = 3000 };
+            timer.Tick += (s, args) =>
+            {
+                lblStatus.Text = "";
+                timer.Stop();
+                timer.Dispose();
+            };
+            timer.Start();
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
             try
             {
-                Process.Start("https://github.com/faisalthaheem/automatic-printer-switcher");
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/dong1088/automatic-printer-switcher-p",
+                    UseShellExecute = true
+                });
             }
-            catch (Exception eX)
+            catch
             {
             }
         }

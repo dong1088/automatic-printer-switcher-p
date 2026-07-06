@@ -41,7 +41,15 @@ namespace PrinterSwitcher
 			//
             if (processName != string.Empty)
             {
-                this.Text = "Map printer for [" + processName + "]";
+                this.Text = I18n.T("MapPrinterFor", processName);
+            }
+
+            // Apply i18n translations
+            if (I18n.IsChinese)
+            {
+                this.Text = I18n.T("AvailablePrinters");
+                this.btnOK.Text = I18n.T("Okay");
+                this.btnCancel.Text = I18n.T("Cancel");
             }
 		}
 
@@ -82,7 +90,7 @@ namespace PrinterSwitcher
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(80, 23);
             this.btnOK.TabIndex = 2;
-            this.btnOK.Text = "Okay";
+            this.btnOK.Text = I18n.T("Okay");
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCancel
@@ -93,7 +101,7 @@ namespace PrinterSwitcher
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 23);
             this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = I18n.T("Cancel");
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lvPrinters
@@ -124,7 +132,7 @@ namespace PrinterSwitcher
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmPrinters";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Available Printers";
+            this.Text = I18n.T("AvailablePrinters");
             this.Load += new System.EventHandler(this.frmPrinters_Load);
             this.ResumeLayout(false);
 
@@ -135,7 +143,7 @@ namespace PrinterSwitcher
 		{
             if (lvPrinters.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please choose a printer", "Choose printer", MessageBoxButtons.OK,
+                MessageBox.Show(I18n.T("PleaseChoosePrinter"), I18n.T("ChoosePrinter"), MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation);
                 return;
             }

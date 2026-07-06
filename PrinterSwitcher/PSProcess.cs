@@ -1,47 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.Json.Serialization;
 
 namespace PrinterSwitcher
 {
-    [Serializable]
     public class PSProcess
     {
-
         private string mProcessName = string.Empty;
-
         private bool mISMDIContainer = false;
 
-        private string mMappedPrinter = string.Empty;
-        
+        [JsonInclude]
         public string ProcessName
         {
-            get
-            {
-                return mProcessName;
-            }
+            get { return mProcessName; }
+            private set { mProcessName = value; }
         }
 
+        [JsonInclude]
         public bool ISMDIContainer
         {
-            get
-            {
-                return mISMDIContainer;
-            }
+            get { return mISMDIContainer; }
+            private set { mISMDIContainer = value; }
         }
 
+        [JsonInclude]
         public string MappedPrinter
         {
-            get
-            {
-                return mMappedPrinter;
-            }
-            set
-            {
-                mMappedPrinter = value;
-            }
+            get { return mMappedPrinter; }
+            set { mMappedPrinter = value; }
         }
-        
+
+        private string mMappedPrinter = string.Empty;
+
         /// <summary>
         /// For deserialization only
         /// </summary>
@@ -53,6 +41,6 @@ namespace PrinterSwitcher
         {
             mProcessName = processName;
             mISMDIContainer = mdiContainer;
-        }        
+        }
     }
 }

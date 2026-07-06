@@ -34,7 +34,7 @@ namespace PrinterSwitcher
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 
@@ -101,7 +101,17 @@ namespace PrinterSwitcher
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.computedsynergy.com");
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/dong1088/automatic-printer-switcher-p",
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+            }
         }
     }
 }
