@@ -8,11 +8,12 @@
     <AssemblyName>PrinterSwitcher</AssemblyName>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <StartupObject>PrinterSwitcher.Program</StartupObject>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.3.0.0</FileVersion>
+    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <FileVersion>2.4.0.0</FileVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
 
   <ItemGroup>

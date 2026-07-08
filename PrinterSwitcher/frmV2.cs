@@ -82,7 +82,7 @@ namespace PrinterSwitcher
             refreshMapping();
 
 
-            selfinfo selfi = new selfinfo();
+            SelfInfo selfi = new SelfInfo();
             this.Text += " v" + selfi.AssemblyVersion;
 
 
@@ -179,7 +179,7 @@ namespace PrinterSwitcher
             try
             {
                 RegistryKey run = Registry.CurrentUser.OpenSubKey(
-                    "Software\\Microsoft\\Windows\\CurrentVersion\\run", true);
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 if (null != run)
                 {
                     string val = (string)run.GetValue("AutomaticPrinterSwitcher");

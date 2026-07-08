@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace PrinterSwitcher
 {
-    class selfinfo
+    class SelfInfo
     {
 
         #region Assembly Attribute Accessors

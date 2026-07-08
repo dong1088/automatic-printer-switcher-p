@@ -7,7 +7,14 @@ Automatically switches the default printer based on the active foreground window
 
 ## 更新内容 / What's new
 
-- .NET 3.5 → **.NET 10**，兼容 Windows 10 / 11
+### v2.4.0 (2026-07-09)
+- 🐛 **Bug 修复 / Bug Fixes**
+  - 修复注册表路径大小写不一致问题 / Fixed registry path case sensitivity issue
+  - 改进异常处理和错误提示 / Improved exception handling and error messages
+  - 更新项目版本到 .NET 8.0 / Updated project to .NET 8.0
+
+### v2.3.0
+- .NET 3.5 → **.NET 8.0**，兼容 Windows 10 / 11
 - 二进制序列化 → **JSON** 存储
 - **中文界面**，托盘菜单一键切换
 - **开机自启**勾选框，主界面直接设置
