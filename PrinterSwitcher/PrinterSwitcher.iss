@@ -3,14 +3,14 @@
 
 [Setup]
 AppName=Automatic Printer Switcher Plus
-AppVersion=2.4.0
+AppVersion=2.5.0
 AppPublisher=Automatic Printer Switcher Plus Team
 AppPublisherURL=https://github.com/dong1088/automatic-printer-switcher-p
 AppSupportURL=https://github.com/dong1088/automatic-printer-switcher-p/issues
 DefaultDirName={autopf}\PrinterSwitcher
 DefaultGroupName=Automatic Printer Switcher Plus
 OutputDir=..\release
-OutputBaseFilename=PrinterSwitcher-2.4.0-setup
+OutputBaseFilename=PrinterSwitcher-2.5.0-setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -22,7 +22,6 @@ LicenseFile=..\LICENSE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
-Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

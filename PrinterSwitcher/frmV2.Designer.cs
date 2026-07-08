@@ -239,7 +239,7 @@
             this.checkingForUpdatesToolStripMenuItem.Enabled = false;
             this.checkingForUpdatesToolStripMenuItem.Name = "checkingForUpdatesToolStripMenuItem";
             this.checkingForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.checkingForUpdatesToolStripMenuItem.Text = "检查更新";
+            this.checkingForUpdatesToolStripMenuItem.Text = "检查更新 / Check for Updates";
             this.checkingForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkingForUpdatesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2

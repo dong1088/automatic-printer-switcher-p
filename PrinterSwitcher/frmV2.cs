@@ -61,6 +61,8 @@ namespace PrinterSwitcher
 
         private void frmV2_Load(object sender, EventArgs e)
         {
+            // 加载语言设置
+            I18n.LoadLanguageSetting();
 
             //assign sort to list views
             lvProcesses.ListViewItemSorter = new ListViewColumnSorter();
@@ -85,7 +87,46 @@ namespace PrinterSwitcher
             SelfInfo selfi = new SelfInfo();
             this.Text += " v" + selfi.AssemblyVersion;
 
+            // 应用语言
+            ApplyLanguage();
 
+        }
+
+        /// <summary>
+        /// 应用当前语言到界面
+        /// </summary>
+        private void ApplyLanguage()
+        {
+            if (I18n.IsChinese)
+            {
+                // 中文标题
+                this.Text = "自动打印机切换器 Plus v" + new SelfInfo().AssemblyVersion;
+                
+                // 应用到 ListView 列标题
+                if (lvProcesses.Columns.Count > 0)
+                {
+                    lvProcesses.Columns[0].Text = "程序";
+                    if (lvProcesses.Columns.Count > 1)
+                        lvProcesses.Columns[1].Text = "打印机";
+                    if (lvProcesses.Columns.Count > 2)
+                        lvProcesses.Columns[2].Text = "类型";
+                }
+            }
+            else
+            {
+                // 英文标题
+                this.Text = "Automatic Printer Switcher Plus v" + new SelfInfo().AssemblyVersion;
+                
+                // 应用到 ListView 列标题
+                if (lvProcesses.Columns.Count > 0)
+                {
+                    lvProcesses.Columns[0].Text = "Program";
+                    if (lvProcesses.Columns.Count > 1)
+                        lvProcesses.Columns[1].Text = "Prints to";
+                    if (lvProcesses.Columns.Count > 2)
+                        lvProcesses.Columns[2].Text = "Type";
+                }
+            }
         }
 
         private void SetListViewStyle()

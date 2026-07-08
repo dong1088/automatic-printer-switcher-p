@@ -1,16 +1,79 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.IO;
 
 namespace PrinterSwitcher
 {
     /// <summary>
-    /// Minimal i18n helper — supports English (default) and Chinese.
+    /// Minimal i18n helper — supports Chinese (default) and English.
     /// Add more languages by extending the dictionaries.
     /// </summary>
     internal static class I18n
     {
-        public static bool IsChinese { get; set; } = false;
+        private static bool _isChinese = true; // 默认中文
+        private static readonly string ConfigFile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "APS", "language.json");
+        
+        public static bool IsChinese 
+        { 
+            get => _isChinese; 
+            set 
+            {
+                _isChinese = value;
+                SaveLanguageSetting();
+            }
+        }
+
+        /// <summary>
+        /// 加载语言设置
+        /// </summary>
+        public static void LoadLanguageSetting()
+        {
+            try
+            {
+                if (File.Exists(ConfigFile))
+                {
+                    string json = File.ReadAllText(ConfigFile);
+                    var settings = System.Text.Json.JsonSerializer.Deserialize<LanguageSettings>(json);
+                    _isChinese = settings?.IsChinese ?? true;
+                }
+            }
+            catch
+            {
+                // 如果读取失败，使用默认中文
+                _isChinese = true;
+            }
+        }
+
+        /// <summary>
+        /// 保存语言设置
+        /// </summary>
+        private static void SaveLanguageSetting()
+        {
+            try
+            {
+                string dir = Path.GetDirectoryName(ConfigFile);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                var settings = new LanguageSettings { IsChinese = _isChinese };
+                string json = System.Text.Json.JsonSerializer.Serialize(settings);
+                File.WriteAllText(ConfigFile, json);
+            }
+            catch
+            {
+                // 保存失败时忽略
+            }
+        }
+
+        private class LanguageSettings
+        {
+            public bool IsChinese { get; set; }
+        }
 
         private static readonly Dictionary<string, string> Zh = new Dictionary<string, string>
         {
@@ -69,8 +132,12 @@ namespace PrinterSwitcher
 
         public static string T(string key)
         {
-            if (!IsChinese) return key; // For non-standard strings, key == English text
-            return Zh.TryGetValue(key, out string val) ? val : key;
+            if (IsChinese) 
+            {
+                return Zh.TryGetValue(key, out string val) ? val : key;
+            }
+            // 英文：返回 key（key 本身就是英文文本）
+            return key;
         }
 
         public static string T(string key, params object[] args)
