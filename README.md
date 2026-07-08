@@ -7,6 +7,13 @@ Automatically switches the default printer based on the active foreground window
 
 ## 更新内容 / What's new
 
+### v2.5.0 (2026-07-09)
+- 🌐 **多语言支持 / Multi-language Support**
+  - 默认中文界面 / Default to Chinese interface
+  - 支持英文界面切换 / Support English interface switching
+  - 自动保存语言设置 / Auto-save language preference
+  - 启动加载语言配置 / Load language config on startup
+
 ### v2.4.0 (2026-07-09)
 - 🐛 **Bug 修复 / Bug Fixes**
   - 修复注册表路径大小写不一致问题 / Fixed registry path case sensitivity issue
